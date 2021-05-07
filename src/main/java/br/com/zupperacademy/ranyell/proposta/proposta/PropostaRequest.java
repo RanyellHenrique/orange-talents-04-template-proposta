@@ -24,4 +24,8 @@ public class PropostaRequest {
     public Proposta toModel() {
         return  new Proposta(cpfOuCnpj, email, endereco, salario);
     }
+
+    public String getCpfOuCnpj() {
+        return cpfOuCnpj;
+    }
 }

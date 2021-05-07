@@ -1,11 +1,11 @@
-package br.com.zupperacademy.ranyell.proposta.compartilhado;
+package br.com.zupperacademy.ranyell.proposta.compartilhado.exceptions;
 
-public class ValidationError {
+public class FieldErrorValidation {
 
     private String field;
     private String message;
 
-    public ValidationError(String field, String message) {
+    public FieldErrorValidation(String field, String message) {
         this.field = field;
         this.message = message;
     }

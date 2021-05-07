@@ -25,7 +25,15 @@ public class Proposta {
         this.salario = salario;
     }
 
+    public String getCpfOuCnpj() {
+        return cpfOuCnpj;
+    }
+
     public Long getId() {
         return id;
+    }
+
+    public BigDecimal getSalario() {
+        return salario;
     }
 }
