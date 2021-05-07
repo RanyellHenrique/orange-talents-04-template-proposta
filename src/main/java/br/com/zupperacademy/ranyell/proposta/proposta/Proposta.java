@@ -9,24 +9,29 @@ public class Proposta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String cpfOuCnpj;
+    private String documento;
     private String email;
+    private String nome;
     private BigDecimal salario;
     private String endereco;
+
+    @Enumerated(EnumType.STRING)
+    private EstadoProposta estadoProposta;
 
     @Deprecated
     public Proposta() {
     }
 
-    public Proposta(String cpfOuCnpj, String email, String endereco, BigDecimal salario) {
-        this.cpfOuCnpj = cpfOuCnpj;
+    public Proposta(String documento, String email, String endereco, BigDecimal salario, String nome) {
+        this.documento = documento;
         this.email = email;
         this.endereco = endereco;
         this.salario = salario;
+        this.nome = nome;
     }
 
-    public String getCpfOuCnpj() {
-        return cpfOuCnpj;
+    public String getDocumento() {
+        return documento;
     }
 
     public Long getId() {
@@ -35,5 +40,13 @@ public class Proposta {
 
     public BigDecimal getSalario() {
         return salario;
+    }
+
+    public String getNome() {
+        return  nome;
+    }
+
+    public void setEstadoProposta(EstadoProposta estadoProposta) {
+        this.estadoProposta = estadoProposta;
     }
 }

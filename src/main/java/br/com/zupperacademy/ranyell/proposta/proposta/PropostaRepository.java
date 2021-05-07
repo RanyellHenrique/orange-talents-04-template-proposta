@@ -8,5 +8,5 @@ import java.util.Optional;
 @Repository
 public interface PropostaRepository  extends JpaRepository<Proposta, Long> {
 
-    Optional<Proposta> findByCpfOuCnpj(String cpfOuCnpj);
+    Optional<Proposta> findByDocumento(String documento);
 }
