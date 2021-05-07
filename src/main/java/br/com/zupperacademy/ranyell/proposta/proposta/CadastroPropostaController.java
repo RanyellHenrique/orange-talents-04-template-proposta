@@ -1,6 +1,7 @@
 package br.com.zupperacademy.ranyell.proposta.proposta;
 
 import br.com.zupperacademy.ranyell.proposta.compartilhado.exceptions.ApiException;
+import br.com.zupperacademy.ranyell.proposta.proposta.avaliacaofinanceira.AvaliaProposta;
 import br.com.zupperacademy.ranyell.proposta.proposta.avaliacaofinanceira.AvaliacaoFinanceiraClient;
 import br.com.zupperacademy.ranyell.proposta.proposta.avaliacaofinanceira.AvaliacaoFinanceiraRequest;
 import feign.FeignException;
@@ -25,12 +26,12 @@ public class CadastroPropostaController {
 
     private final Logger logger = LoggerFactory.getLogger(CadastroPropostaController.class);
     private PropostaRepository repository;
-    private AvaliacaoFinanceiraClient avaliacaoFinanceiraClient;
+    private AvaliaProposta avaliaProposta;
 
     @Autowired
-    public CadastroPropostaController(PropostaRepository repository, AvaliacaoFinanceiraClient avaliacaoFinanceiraClient) {
+    public CadastroPropostaController(PropostaRepository repository, AvaliaProposta avaliaProposta) {
         this.repository = repository;
-        this.avaliacaoFinanceiraClient = avaliacaoFinanceiraClient;
+        this.avaliaProposta = avaliaProposta;
     }
 
     @PostMapping
@@ -43,7 +44,7 @@ public class CadastroPropostaController {
         }
         Proposta proposta = request.toModel();
         repository.save(proposta);
-        proposta.setEstadoProposta(analiseProposta(proposta));
+        proposta.setEstadoProposta(avaliaProposta.analiseProposta(proposta));
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
                 .buildAndExpand(proposta.getId()).toUri();
         logger.info("Proposta documento={} salário={} criada com sucesso! ",proposta.getDocumento(), proposta.getSalario());
@@ -51,16 +52,5 @@ public class CadastroPropostaController {
     }
 
 
-    private EstadoProposta analiseProposta(Proposta proposta) {
-        try{
-           avaliacaoFinanceiraClient.avaliacao(new AvaliacaoFinanceiraRequest(proposta.getDocumento(), proposta.getNome(), proposta.getId()));
-            logger.info("Avaliação financeira: {}", EstadoProposta.ELEGIVEL);
-            return EstadoProposta.ELEGIVEL;
-        }catch (FeignException.UnprocessableEntity e) {
-            logger.info("Avaliação financeira: {}", EstadoProposta.NAO_ELEGIVEL);
-          return EstadoProposta.NAO_ELEGIVEL;
-        }catch (FeignException e) {
-            throw  new ApiException(e.getMessage(), HttpStatus.valueOf(e.status()));
-        }
-    }
+
 }
