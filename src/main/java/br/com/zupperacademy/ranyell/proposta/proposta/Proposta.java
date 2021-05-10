@@ -48,6 +48,22 @@ public class Proposta {
         return  nome;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public EstadoProposta getEstadoProposta() {
+        return estadoProposta;
+    }
+
+    public String getCartao() {
+        return cartao;
+    }
+
     public void setEstadoProposta(EstadoProposta estadoProposta) {
         this.estadoProposta = estadoProposta;
     }

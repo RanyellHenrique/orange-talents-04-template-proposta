@@ -23,7 +23,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationError> validation(MethodArgumentNotValidException e, HttpServletRequest request) {
         ValidationError err = new  ValidationError(Instant.now(), HttpStatus.BAD_REQUEST.value(),
-                "Unprocessable Entity Error", e.getMessage(), request.getRequestURI());
+                "Validation Exception", e.getMessage(), request.getRequestURI());
 
         for(FieldError erro : e.getBindingResult().getFieldErrors()) {
             err.addErro(new FieldErrorValidation(erro.getField(), erro.getDefaultMessage()));
@@ -34,8 +34,8 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<StandardError>  apiException(ApiException e, HttpServletRequest request) {
-        StandardError err = new StandardError(Instant.now(), e.getStatus().value(),
-                "Unprocessable Entity Error", e.getMessage(), request.getRequestURI());
+        StandardError err = new StandardError(Instant.now(), e.getStatus().value(), "Api Exception",
+                e.getMessage(), request.getRequestURI());
         logger.error(e.getMessage());
         return  ResponseEntity.status(e.getStatus()).body(err);
     }
