@@ -1,4 +1,4 @@
-package br.com.zupperacademy.ranyell.proposta.proposta.avaliacaofinanceira;
+package br.com.zupperacademy.ranyell.proposta.avaliacaofinanceira;
 
 import br.com.zupperacademy.ranyell.proposta.proposta.EstadoProposta;
 

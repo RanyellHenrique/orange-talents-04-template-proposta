@@ -18,6 +18,8 @@ public class Proposta {
     @Enumerated(EnumType.STRING)
     private EstadoProposta estadoProposta;
 
+    private String cartao;
+
     @Deprecated
     public Proposta() {
     }
@@ -48,5 +50,9 @@ public class Proposta {
 
     public void setEstadoProposta(EstadoProposta estadoProposta) {
         this.estadoProposta = estadoProposta;
+    }
+
+    public void setCartao(String cartao) {
+        this.cartao = cartao;
     }
 }

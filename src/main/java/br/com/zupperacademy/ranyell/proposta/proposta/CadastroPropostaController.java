@@ -1,7 +1,7 @@
 package br.com.zupperacademy.ranyell.proposta.proposta;
 
 import br.com.zupperacademy.ranyell.proposta.compartilhado.exceptions.ApiException;
-import br.com.zupperacademy.ranyell.proposta.proposta.avaliacaofinanceira.AvaliaProposta;
+import br.com.zupperacademy.ranyell.proposta.avaliacaofinanceira.AvaliaProposta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
