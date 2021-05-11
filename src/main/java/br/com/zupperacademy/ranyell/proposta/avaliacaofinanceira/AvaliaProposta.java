@@ -30,8 +30,8 @@ public class AvaliaProposta {
         }catch (FeignException.UnprocessableEntity e) {
             logger.info("Avaliação financeira: {}, Proposta de id: {}", EstadoProposta.NAO_ELEGIVEL, proposta.getId());
             return EstadoProposta.NAO_ELEGIVEL;
-        }catch (FeignException e) {
-            throw  new ApiException(e.getMessage(), HttpStatus.valueOf(e.status()));
+        } catch (Exception e) {
+            throw  new ApiException(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }
