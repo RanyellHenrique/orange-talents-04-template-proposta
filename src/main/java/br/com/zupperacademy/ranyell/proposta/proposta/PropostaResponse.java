@@ -9,7 +9,6 @@ public class PropostaResponse {
     private BigDecimal salario;
     private String endereco;
     private EstadoProposta estadoProposta;
-    private String cartao;
 
     public PropostaResponse(Proposta proposta) {
         this.documento = proposta.getDocumento();
@@ -18,7 +17,6 @@ public class PropostaResponse {
         this.salario = proposta.getSalario();
         this.endereco = proposta.getEndereco();
         this.estadoProposta = proposta.getEstadoProposta();
-        this.cartao = proposta.getCartao();
     }
 
     public String getDocumento() {
@@ -43,9 +41,5 @@ public class PropostaResponse {
 
     public EstadoProposta getEstadoProposta() {
         return estadoProposta;
-    }
-
-    public String getCartao() {
-        return cartao;
     }
 }

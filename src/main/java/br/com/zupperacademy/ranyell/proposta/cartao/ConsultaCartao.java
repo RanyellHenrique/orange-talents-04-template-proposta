@@ -18,24 +18,26 @@ public class ConsultaCartao {
 
     private final Logger logger = LoggerFactory.getLogger(ConsultaCartao.class);
 
-    private PropostaRepository repository;
+    private PropostaRepository propostaRepository;
     private CartaoClient cartaoClient;
+    private CartaoRepository cartaoRepository;
 
     @Autowired
-    public ConsultaCartao(PropostaRepository repository, CartaoClient cartaoClient) {
-        this.repository = repository;
+    public ConsultaCartao(PropostaRepository propostaRepository, CartaoClient cartaoClient, CartaoRepository cartaoRepository) {
+        this.propostaRepository = propostaRepository;
         this.cartaoClient = cartaoClient;
+        this.cartaoRepository = cartaoRepository;
     }
 
     @Scheduled(fixedDelayString = "${intervalo.consulta.cartao}")
     @Transactional
     public  void associaCartao() {
-        List<Proposta> propostas = repository.findByCartaoIsNullAndEstadoProposta(EstadoProposta.ELEGIVEL);
+        List<Proposta> propostas = propostaRepository.findByCartaoIsNullAndEstadoProposta(EstadoProposta.ELEGIVEL);
         for (Proposta proposta : propostas) {
             try{
-                var cartao = cartaoClient.buscaCartaoPorProposta(proposta.getId()).getBody().getId();
-                proposta.setCartao(cartao);
-                logger.info("Cartão = {} adicionado a proposta de id = {}", cartao, proposta.getId());
+                var cartao = cartaoClient.buscaCartaoPorProposta(proposta.getId()).getBody();
+                cartaoRepository.save(cartao.toModel(proposta));
+                logger.info("Cartão = {} adicionado a proposta de id = {}", cartao.getId(), proposta.getId());
             } catch (FeignException e) {
                 logger.info("Proposta = {} ainda não possui um cartão", proposta.getId());
             }

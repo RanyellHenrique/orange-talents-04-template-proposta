@@ -1,5 +1,7 @@
 package br.com.zupperacademy.ranyell.proposta.proposta;
 
+import br.com.zupperacademy.ranyell.proposta.cartao.Cartao;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -18,7 +20,8 @@ public class Proposta {
     @Enumerated(EnumType.STRING)
     private EstadoProposta estadoProposta;
 
-    private String cartao;
+    @OneToOne(mappedBy = "proposta", cascade = CascadeType.PERSIST)
+    private Cartao cartao;
 
     @Deprecated
     public Proposta() {
@@ -60,15 +63,9 @@ public class Proposta {
         return estadoProposta;
     }
 
-    public String getCartao() {
-        return cartao;
-    }
-
     public void setEstadoProposta(EstadoProposta estadoProposta) {
         this.estadoProposta = estadoProposta;
     }
 
-    public void setCartao(String cartao) {
-        this.cartao = cartao;
-    }
+
 }

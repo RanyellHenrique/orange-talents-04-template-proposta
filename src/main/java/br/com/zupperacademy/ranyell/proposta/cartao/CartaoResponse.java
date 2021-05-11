@@ -1,5 +1,7 @@
 package br.com.zupperacademy.ranyell.proposta.cartao;
 
+import br.com.zupperacademy.ranyell.proposta.proposta.Proposta;
+
 public class CartaoResponse {
 
     private String id;
@@ -16,5 +18,9 @@ public class CartaoResponse {
 
     public String getEmitidoEm() {
         return emitidoEm;
+    }
+
+    public Cartao toModel(Proposta proposta) {
+        return new Cartao(id, proposta);
     }
 }
