@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/propostas")
+@RequestMapping("api/propostas")
 public class CadastroPropostaController {
 
     private final Logger logger = LoggerFactory.getLogger(CadastroPropostaController.class);

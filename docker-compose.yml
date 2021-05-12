@@ -11,26 +11,29 @@ services:
       - MYSQL_DATABASE=db_proposta
       - MYSQL_PASSWORD=1234
 
-  proposta-app:
-    build:
-      dockerfile: Dockerfile
-      context: .
-    image: ranyell/proposta
-    container_name: proposta
-    ports:
-      - 8080:8080
-    depends_on:
-      - db
-      - analise
-      - contas
-    environment:
-      DATABASE_URL: jdbc:mysql://db:3306/db_proposta?autoReconnect=true&SSL=false
-      DATABASE_USER: "root"
-      DATABASE_PASSWORD: "1234"
-      API_AVALIACAO_FINANCEIRA_URL: "http://analise:9999"
-      API_AVALIACAO_FINANCEIRA_NAME: "api-avaliacao-financeira"
-      CARTOES_URL: "http://contas:8888"
-      API_CARTAO_NAME: "api-catao"
+#  proposta-app:
+#    build:
+#      dockerfile: Dockerfile
+#      context: .
+#    image: ranyell/proposta
+#    container_name: proposta
+#    ports:
+#      - 8080:8080
+#    depends_on:
+#      - db
+#      - analise
+#      - contas
+#      - keycloak
+#    environment:
+#      DATABASE_URL: jdbc:mysql://db:3306/db_proposta?autoReconnect=true&SSL=false
+#      DATABASE_USER: "root"
+#      DATABASE_PASSWORD: "1234"
+#      API_AVALIACAO_FINANCEIRA_URL: "http://analise:9999"
+#      API_AVALIACAO_FINANCEIRA_NAME: "api-avaliacao-financeira"
+#      CARTOES_URL: "http://contas:8888"
+#      API_CARTAO_NAME: "api-catao"
+#      KEYCLOAK_ISSUER_URI: "http://keycloak:8080/auth/realms/propostas"
+#      KEYCLOAK_JWKS_URI: "http://keycloak:8080/auth/realms/propostas/protocol/openid-connect/certs"
 
   zookeeper:
     image: "confluentinc/cp-zookeeper:5.2.1"

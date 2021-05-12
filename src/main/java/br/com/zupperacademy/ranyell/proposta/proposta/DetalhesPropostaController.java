@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/propostas")
+@RequestMapping("api/propostas")
 public class DetalhesPropostaController {
 
     private final Logger logger = LoggerFactory.getLogger(DetalhesPropostaController.class);

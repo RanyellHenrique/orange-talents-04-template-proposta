@@ -15,7 +15,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/cartoes")
+@RequestMapping("api/cartoes")
 public class CadastroBiometriaController {
 
     private CartaoRepository cartaoRepository;
