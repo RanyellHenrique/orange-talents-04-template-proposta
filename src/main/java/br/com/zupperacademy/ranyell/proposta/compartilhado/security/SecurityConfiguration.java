@@ -21,6 +21,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .antMatchers(HttpMethod.POST, "/api/cartoes/**").hasAnyAuthority("ROLE_ADMIN")
                         .antMatchers(HttpMethod.POST, "/api/propostas/**").hasAnyAuthority("ROLE_ADMIN")
                         .antMatchers(HttpMethod.GET, "/api/propostas/**").hasAnyAuthority("ROLE_CLIENT", "ROLE_ADMIN")
+                        .antMatchers(HttpMethod.GET, "/actuator/**").hasAnyAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())
                 .oauth2ResourceServer()
                 .jwt()

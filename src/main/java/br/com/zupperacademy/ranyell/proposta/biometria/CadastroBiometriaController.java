@@ -31,6 +31,7 @@ public class CadastroBiometriaController {
     @Transactional
     public ResponseEntity<Void> insert(@RequestBody @Valid BiometriaRequest request, @PathVariable Long id) {
         Optional<Cartao> supostoCartao = cartaoRepository.findById(id);
+
         if(supostoCartao.isEmpty()) {
             throw new ApiException("Cartão não encontrado", HttpStatus.NOT_FOUND);
         }
