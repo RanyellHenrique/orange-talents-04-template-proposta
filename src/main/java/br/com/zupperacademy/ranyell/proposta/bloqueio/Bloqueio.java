@@ -18,6 +18,9 @@ public class Bloqueio {
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Cartao cartao;
 
+    /*
+     * @Deprecated apenas para o uso do hibernate
+     * */
     @Deprecated
     public Bloqueio() {
     }
@@ -35,5 +38,9 @@ public class Bloqueio {
 
     public String getUserAgent() {
         return userAgent;
+    }
+
+    public Cartao getCartao() {
+        return cartao;
     }
 }

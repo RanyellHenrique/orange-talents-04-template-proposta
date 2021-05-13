@@ -15,6 +15,9 @@ public class Biometria {
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Cartao cartao;
 
+    /*
+     * @Deprecated apenas para o uso do hibernate
+     * */
     @Deprecated
     public Biometria() {
     }
