@@ -12,6 +12,9 @@ public class Cartao {
     private Long id;
     private String numero;
 
+    @Enumerated(EnumType.STRING)
+    private EstadoCartao estadoCartao;
+
     @OneToOne(cascade = CascadeType.PERSIST)
     private Proposta proposta;
 
@@ -22,6 +25,7 @@ public class Cartao {
     public Cartao(String numero, Proposta proposta) {
         this.numero = numero;
         this.proposta = proposta;
+        this.estadoCartao = EstadoCartao.DESBLOQUEADO;
     }
 
     public Long getId() {
@@ -30,5 +34,17 @@ public class Cartao {
 
     public String getNumero() {
         return numero;
+    }
+
+    public Proposta getProposta() {
+        return proposta;
+    }
+
+    public EstadoCartao getEstadoCartao() {
+        return estadoCartao;
+    }
+
+    public void bloquearCartao() {
+        estadoCartao = EstadoCartao.BLOQUEADO;
     }
 }
