@@ -5,7 +5,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
@@ -18,14 +17,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests(authorizeRequests ->
                 authorizeRequests
                         .antMatchers(HttpMethod.GET, "/api/cartoes/**").hasAnyAuthority("ROLE_CLIENT", "ROLE_ADMIN")
-                        .antMatchers(HttpMethod.POST, "/api/cartoes/**").hasAnyAuthority("ROLE_ADMIN")
-                        .antMatchers(HttpMethod.POST, "/api/propostas/**").hasAnyAuthority("ROLE_ADMIN")
+                        .antMatchers(HttpMethod.POST, "/api/cartoes/**").hasAnyAuthority("ROLE_CLIENT", "ROLE_ADMIN")
+                        .antMatchers(HttpMethod.POST, "/api/propostas/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_CLIENT")
                         .antMatchers(HttpMethod.GET, "/api/propostas/**").hasAnyAuthority("ROLE_CLIENT", "ROLE_ADMIN")
                         .antMatchers(HttpMethod.GET, "/actuator/**").hasAnyAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())
-                .oauth2ResourceServer()
-                .jwt()
-                .jwtAuthenticationConverter(getJwtAuthenticationConverter());
+                        .oauth2ResourceServer()
+                        .jwt()
+                        .jwtAuthenticationConverter(getJwtAuthenticationConverter());
     }
 
     /*

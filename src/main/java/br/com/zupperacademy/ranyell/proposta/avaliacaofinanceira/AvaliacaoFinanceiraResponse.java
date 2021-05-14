@@ -1,6 +1,7 @@
 package br.com.zupperacademy.ranyell.proposta.avaliacaofinanceira;
 
 import br.com.zupperacademy.ranyell.proposta.proposta.CpfOuCnpj;
+import br.com.zupperacademy.ranyell.proposta.proposta.EstadoProposta;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -40,5 +41,9 @@ public class AvaliacaoFinanceiraResponse {
 
     public Long getIdProposta() {
         return idProposta;
+    }
+
+    public EstadoProposta getEstadoProposta() {
+        return resultadoSolicitacao.getEstadoProposta();
     }
 }

@@ -6,6 +6,8 @@ import br.com.zupperacademy.ranyell.proposta.compartilhado.exceptions.ApiExcepti
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -29,13 +31,18 @@ public class CadastroBiometriaController {
 
     @PostMapping("/{id}/biometrias")
     @Transactional
-    public ResponseEntity<Void> insert(@RequestBody @Valid BiometriaRequest request, @PathVariable Long id) {
-        Optional<Cartao> supostoCartao = cartaoRepository.findById(id);
-
-        if(supostoCartao.isEmpty()) {
+    public ResponseEntity<Void> insert(@RequestBody @Valid BiometriaRequest request, @PathVariable Long id, @AuthenticationPrincipal Jwt usuario) {
+        if(cartaoRepository.existsById(id)) {
             throw new ApiException("Cartão não encontrado", HttpStatus.NOT_FOUND);
         }
-        Biometria biometria = request.toModel(supostoCartao.get());
+
+        Cartao cartao = cartaoRepository.getOne(id);
+
+        if(!usuario.getClaims().get("email").equals(cartao.getEmailProposta())) {
+            throw  new ApiException("Cartão não pertence ao Usuário", HttpStatus.UNAUTHORIZED);
+        }
+
+        Biometria biometria = request.toModel(cartao);
         biometriaRepository.save(biometria);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
                 .buildAndExpand(biometria.getId()).toUri();

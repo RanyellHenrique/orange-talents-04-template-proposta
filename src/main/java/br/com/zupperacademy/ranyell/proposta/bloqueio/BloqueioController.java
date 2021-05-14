@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,19 +39,25 @@ public class BloqueioController {
 
     @PostMapping("/{id}/bloqueios")
     @Transactional
-    public ResponseEntity<?> bloquearCartao(HttpServletRequest servletRequest, @PathVariable Long id) {
-        Cartao supostoCartao = cartaoRepository.findById(id)
-                .orElseThrow(() -> new ApiException("Cartão não encontrado", HttpStatus.NOT_FOUND));
+    public ResponseEntity<?> bloquearCartao(HttpServletRequest servletRequest, @PathVariable Long id,
+                                            @AuthenticationPrincipal Jwt usuario) {
+        if(!cartaoRepository.existsById(id)) {
+            throw new ApiException("Cartão não encontrado", HttpStatus.NOT_FOUND);
+        }
+        Cartao cartao = cartaoRepository.getOne(id);
+        if(!usuario.getClaims().get("email").equals(cartao.getEmailProposta())) {
+            throw  new ApiException("Cartão não pertence ao Usuário", HttpStatus.UNAUTHORIZED);
+        }
 
-        if(supostoCartao.getEstadoCartao() == EstadoCartao.BLOQUEADO) {
+        if(cartao.getEstadoCartao() == EstadoCartao.BLOQUEADO) {
             throw new ApiException("Cartão já está Bloqueado", HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
-        Bloqueio bloqueio = new Bloqueio(servletRequest.getRemoteAddr(), servletRequest.getHeader("User-Agent"), supostoCartao);
+        Bloqueio bloqueio = new Bloqueio(servletRequest.getRemoteAddr(), servletRequest.getHeader("User-Agent"), cartao);
         solicitaBloqueio.bloqueiaCartao(bloqueio);
         bloqueioRepository.save(bloqueio);
-        supostoCartao.bloquearCartao();
-        logger.info("Bloqueio do cartão de id = {} realizado com sucesso", supostoCartao.getId());
+        cartao.bloquearCartao();
+        logger.info("Bloqueio do cartão de id = {} realizado com sucesso", cartao.getId());
         return ResponseEntity.ok().build();
     }
 }

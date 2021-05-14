@@ -6,6 +6,8 @@ import br.com.zupperacademy.ranyell.proposta.compartilhado.exceptions.ApiExcepti
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,11 +33,19 @@ public class CadastroAvisoController {
     @PostMapping("{id}/avisos")
     @Transactional
     public ResponseEntity<Void> cadastraAviso(@Valid @RequestBody AvisoRequest request,
-                                              HttpServletRequest servletRequest, @PathVariable Long id) {
+                                              HttpServletRequest servletRequest, @PathVariable Long id,
+                                              @AuthenticationPrincipal Jwt usuario) {
+
         if(!cartaoRepository.existsById(id)) {
             throw new ApiException("Cartão não existe", HttpStatus.NOT_FOUND);
         }
+
         Cartao cartao = cartaoRepository.getOne(id);
+
+        if(!usuario.getClaims().get("email").equals(cartao.getEmailProposta())) {
+            throw  new ApiException("Cartão não pertence ao Usuário", HttpStatus.UNAUTHORIZED);
+        }
+
         Aviso aviso = request.toModel(servletRequest.getHeader("user-agent"), servletRequest.getRemoteAddr(), cartao);
         solicitaAviso.avisaSistema(aviso);
         avisoRepository.save(aviso);

@@ -53,4 +53,8 @@ public class Cartao {
     public void bloquearCartao() {
         estadoCartao = EstadoCartao.BLOQUEADO;
     }
+
+    public String getEmailProposta() {
+        return proposta.getEmail();
+    }
 }

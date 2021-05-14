@@ -24,9 +24,10 @@ public class SolicitaAnaliseProposta {
 
     public void analiseProposta(Proposta proposta) {
         try{
-            avaliacaoFinanceiraClient.avaliacao(new AvaliacaoFinanceiraRequest(proposta.getDocumento(), proposta.getNome(), proposta.getId()));
+            var avaliacao = avaliacaoFinanceiraClient.avaliacao(new AvaliacaoFinanceiraRequest(proposta.getDocumento(),
+                                                        proposta.getNome(), proposta.getId())).getBody();
             logger.info("Avaliação financeira: {}, Proposta de id: {}", EstadoProposta.ELEGIVEL, proposta.getId());
-            proposta.setEstadoProposta(EstadoProposta.ELEGIVEL);
+            proposta.setEstadoProposta(avaliacao.getEstadoProposta());
         }catch (FeignException.UnprocessableEntity e) {
             logger.info("Avaliação financeira: {}, Proposta de id: {}", EstadoProposta.NAO_ELEGIVEL, proposta.getId());
             proposta.setEstadoProposta(EstadoProposta.NAO_ELEGIVEL);
