@@ -40,7 +40,11 @@ public class Bloqueio {
         return userAgent;
     }
 
-    public Cartao getCartao() {
-        return cartao;
+    public String getNumeroDoCartao() {
+        return cartao.getNumero();
+    }
+
+    public void bloquearCartao() {
+        cartao.bloquearCartao();
     }
 }

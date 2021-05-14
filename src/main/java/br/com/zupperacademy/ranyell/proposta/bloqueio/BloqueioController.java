@@ -26,13 +26,13 @@ public class BloqueioController {
 
     private CartaoRepository cartaoRepository;
     private BloqueioRepository bloqueioRepository;
-    private NotificaSistema notificaSistema;
+    private SolicitaBloqueio solicitaBloqueio;
 
     @Autowired
-    public BloqueioController(CartaoRepository cartaoRepository, BloqueioRepository bloqueioRepository, NotificaSistema notificaSistema) {
+    public BloqueioController(CartaoRepository cartaoRepository, BloqueioRepository bloqueioRepository, SolicitaBloqueio solicitaBloqueio) {
         this.cartaoRepository = cartaoRepository;
         this.bloqueioRepository = bloqueioRepository;
-        this.notificaSistema = notificaSistema;
+        this.solicitaBloqueio = solicitaBloqueio;
     }
 
     @PostMapping("/{id}/bloqueios")
@@ -46,7 +46,7 @@ public class BloqueioController {
         }
 
         Bloqueio bloqueio = new Bloqueio(servletRequest.getRemoteAddr(), servletRequest.getHeader("User-Agent"), supostoCartao);
-        notificaSistema.bloqueiaCartao(bloqueio);
+        solicitaBloqueio.bloqueiaCartao(bloqueio);
         bloqueioRepository.save(bloqueio);
         supostoCartao.bloquearCartao();
         logger.info("Bloqueio do cartão de id = {} realizado com sucesso", supostoCartao.getId());

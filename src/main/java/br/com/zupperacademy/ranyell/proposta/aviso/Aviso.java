@@ -1,4 +1,4 @@
-package br.com.zupperacademy.ranyell.proposta.avisodeviagem;
+package br.com.zupperacademy.ranyell.proposta.aviso;
 
 import br.com.zupperacademy.ranyell.proposta.cartao.Cartao;
 
@@ -6,10 +6,10 @@ import javax.persistence.*;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
-public class AvisoDeViagem {
+public class Aviso {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,9 +17,9 @@ public class AvisoDeViagem {
     @NotBlank
     private String destino;
     @NotNull @Future
-    private LocalDateTime terminaEm;
+    private LocalDate validoAte;
     @NotNull
-    private LocalDateTime criadoEm;
+    private LocalDate criadoEm;
     @NotBlank
     private String ip;
     @NotBlank
@@ -32,17 +32,31 @@ public class AvisoDeViagem {
      * @Deprecated apenas para o uso do hibernate
      * */
     @Deprecated
-    public AvisoDeViagem() {
+    public Aviso() {
     }
 
-    public AvisoDeViagem(String destino, LocalDateTime terminaEm, String ip, String userAgent, Cartao cartao) {
+    public Aviso(String destino, LocalDate validoAte, String ip, String userAgent, Cartao cartao) {
         this.destino = destino;
-        this.terminaEm = terminaEm;
+        this.validoAte = validoAte;
         this.ip = ip;
         this.userAgent = userAgent;
         this.cartao = cartao;
-        this.criadoEm = LocalDateTime.now();
+        this.criadoEm = LocalDate.now();
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public LocalDate getValidoAte() {
+        return validoAte;
+    }
+
+    public String getNumeroDoCartao() {
+        return cartao.getNumero();
+    }
+
+    public String getDestino() {
+        return destino;
+    }
 }

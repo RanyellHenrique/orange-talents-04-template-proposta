@@ -1,4 +1,4 @@
-package br.com.zupperacademy.ranyell.proposta.avisodeviagem;
+package br.com.zupperacademy.ranyell.proposta.aviso;
 
 import br.com.zupperacademy.ranyell.proposta.cartao.Cartao;
 import br.com.zupperacademy.ranyell.proposta.cartao.CartaoRepository;
@@ -14,28 +14,31 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("api/cartoes")
-public class CadastroAvisoDeViagemController {
+public class CadastroAvisoController {
 
     private CartaoRepository cartaoRepository;
-    private AvisoDeViagemRepository avisoDeViagemRepository;
+    private AvisoRepository avisoRepository;
+    private SolicitaAviso solicitaAviso;
 
     @Autowired
-    public CadastroAvisoDeViagemController(CartaoRepository cartaoRepository,
-                                           AvisoDeViagemRepository avisoDeViagemRepository) {
+    public CadastroAvisoController(CartaoRepository cartaoRepository, AvisoRepository avisoRepository,
+                                   SolicitaAviso solicitaAviso) {
         this.cartaoRepository = cartaoRepository;
-        this.avisoDeViagemRepository = avisoDeViagemRepository;
+        this.avisoRepository = avisoRepository;
+        this.solicitaAviso = solicitaAviso;
     }
 
-    @PostMapping("{id}/avisos-de-viagens")
+    @PostMapping("{id}/avisos")
     @Transactional
-    public ResponseEntity<Void> cadastraAviso(@Valid @RequestBody AvisoDeViagemRequest request,
+    public ResponseEntity<Void> cadastraAviso(@Valid @RequestBody AvisoRequest request,
                                               HttpServletRequest servletRequest, @PathVariable Long id) {
         if(!cartaoRepository.existsById(id)) {
             throw new ApiException("Cartão não existe", HttpStatus.NOT_FOUND);
         }
         Cartao cartao = cartaoRepository.getOne(id);
-        AvisoDeViagem avisoDeViagem = request.toModel(servletRequest.getHeader("user-agent"), servletRequest.getRemoteAddr(), cartao);
-        avisoDeViagemRepository.save(avisoDeViagem);
+        Aviso aviso = request.toModel(servletRequest.getHeader("user-agent"), servletRequest.getRemoteAddr(), cartao);
+        solicitaAviso.avisaSistema(aviso);
+        avisoRepository.save(aviso);
         return  ResponseEntity.ok().build();
     }
 }

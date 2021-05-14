@@ -1,7 +1,9 @@
 package br.com.zupperacademy.ranyell.proposta.cartao;
 
-import br.com.zupperacademy.ranyell.proposta.bloqueio.BloqueioRequest;
-import br.com.zupperacademy.ranyell.proposta.bloqueio.BloqueioResponse;
+import br.com.zupperacademy.ranyell.proposta.aviso.AvisoClientRequest;
+import br.com.zupperacademy.ranyell.proposta.aviso.AvisoClientResponse;
+import br.com.zupperacademy.ranyell.proposta.bloqueio.BloqueioClientRequest;
+import br.com.zupperacademy.ranyell.proposta.bloqueio.BloqueioClientResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface CartaoClient {
 
     @GetMapping("/api/cartoes")
-    public ResponseEntity<CartaoResponse> buscaCartaoPorProposta(@PathVariable("idProposta") Long idProposta);
+    public ResponseEntity<CartaoClientResponse> buscaCartaoPorProposta(@PathVariable("idProposta") Long idProposta);
 
     @PostMapping("/api/cartoes/{id}/bloqueios")
-    public ResponseEntity<BloqueioResponse> bloquearCartao(@PathVariable String id, @RequestBody BloqueioRequest request);
+    public ResponseEntity<BloqueioClientResponse> bloquear(@PathVariable String id, @RequestBody BloqueioClientRequest request);
+
+    @PostMapping("/api/cartoes/{id}/avisos")
+    public ResponseEntity<AvisoClientResponse> avisar(@PathVariable String id, @RequestBody AvisoClientRequest request);
 }

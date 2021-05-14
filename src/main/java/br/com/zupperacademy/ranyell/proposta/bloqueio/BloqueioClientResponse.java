@@ -2,11 +2,11 @@ package br.com.zupperacademy.ranyell.proposta.bloqueio;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class BloqueioResponse {
+public class BloqueioClientResponse {
 
     private String resultado;
 
-    public BloqueioResponse(@JsonProperty("resultado") String resultado) {
+    public BloqueioClientResponse(@JsonProperty("resultado") String resultado) {
         this.resultado = resultado;
     }
 

@@ -1,7 +1,7 @@
 package br.com.zupperacademy.ranyell.proposta.proposta;
 
 import br.com.zupperacademy.ranyell.proposta.compartilhado.exceptions.ApiException;
-import br.com.zupperacademy.ranyell.proposta.avaliacaofinanceira.AvaliaProposta;
+import br.com.zupperacademy.ranyell.proposta.avaliacaofinanceira.SolicitaAnaliseProposta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +23,12 @@ public class CadastroPropostaController {
 
     private final Logger logger = LoggerFactory.getLogger(CadastroPropostaController.class);
     private PropostaRepository repository;
-    private AvaliaProposta avaliaProposta;
+    private SolicitaAnaliseProposta solicitaAnaliseProposta;
 
     @Autowired
-    public CadastroPropostaController(PropostaRepository repository, AvaliaProposta avaliaProposta) {
+    public CadastroPropostaController(PropostaRepository repository, SolicitaAnaliseProposta solicitaAnaliseProposta) {
         this.repository = repository;
-        this.avaliaProposta = avaliaProposta;
+        this.solicitaAnaliseProposta = solicitaAnaliseProposta;
     }
 
     @PostMapping
@@ -41,7 +41,7 @@ public class CadastroPropostaController {
         }
         Proposta proposta = request.toModel();
         repository.save(proposta);
-        proposta.setEstadoProposta(avaliaProposta.analiseProposta(proposta));
+        solicitaAnaliseProposta.analiseProposta(proposta);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
                 .buildAndExpand(proposta.getId()).toUri();
         logger.info("Proposta documento={} salário={} criada com sucesso! ",proposta.getDocumento(), proposta.getSalario());

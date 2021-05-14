@@ -11,25 +11,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AvaliaProposta {
+public class SolicitaAnaliseProposta {
 
-    private final Logger logger = LoggerFactory.getLogger(AvaliaProposta.class);
+    private final Logger logger = LoggerFactory.getLogger(SolicitaAnaliseProposta.class);
 
     private AvaliacaoFinanceiraClient avaliacaoFinanceiraClient;
 
     @Autowired
-    public AvaliaProposta(AvaliacaoFinanceiraClient avaliacaoFinanceiraClient) {
+    public SolicitaAnaliseProposta(AvaliacaoFinanceiraClient avaliacaoFinanceiraClient) {
         this.avaliacaoFinanceiraClient = avaliacaoFinanceiraClient;
     }
 
-    public EstadoProposta analiseProposta(Proposta proposta) {
+    public void analiseProposta(Proposta proposta) {
         try{
             avaliacaoFinanceiraClient.avaliacao(new AvaliacaoFinanceiraRequest(proposta.getDocumento(), proposta.getNome(), proposta.getId()));
             logger.info("Avaliação financeira: {}, Proposta de id: {}", EstadoProposta.ELEGIVEL, proposta.getId());
-            return EstadoProposta.ELEGIVEL;
+            proposta.setEstadoProposta(EstadoProposta.ELEGIVEL);
         }catch (FeignException.UnprocessableEntity e) {
             logger.info("Avaliação financeira: {}, Proposta de id: {}", EstadoProposta.NAO_ELEGIVEL, proposta.getId());
-            return EstadoProposta.NAO_ELEGIVEL;
+            proposta.setEstadoProposta(EstadoProposta.NAO_ELEGIVEL);
         } catch (Exception e) {
             throw  new ApiException(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
