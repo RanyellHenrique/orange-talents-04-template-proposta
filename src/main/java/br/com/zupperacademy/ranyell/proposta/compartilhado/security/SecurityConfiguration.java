@@ -29,7 +29,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     /*
-    * Define os Roles serão os campos para a autorização dos endpoits
+    * Define que os Roles serão considerados para o acesso aos endpoits
     * */
     JwtAuthenticationConverter getJwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
