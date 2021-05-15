@@ -1,5 +1,5 @@
 package br.com.zupperacademy.ranyell.proposta.carteira;
 
 public enum TipoCarteira {
-    PAYPAL;
+    PAYPAL, SAMSUNG_PAY;
 }
