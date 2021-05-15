@@ -4,6 +4,8 @@ import br.com.zupperacademy.ranyell.proposta.aviso.AvisoClientRequest;
 import br.com.zupperacademy.ranyell.proposta.aviso.AvisoClientResponse;
 import br.com.zupperacademy.ranyell.proposta.bloqueio.BloqueioClientRequest;
 import br.com.zupperacademy.ranyell.proposta.bloqueio.BloqueioClientResponse;
+import br.com.zupperacademy.ranyell.proposta.carteira.CarteiraClientRequest;
+import br.com.zupperacademy.ranyell.proposta.carteira.CarteiraClientResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,4 +24,7 @@ public interface CartaoClient {
 
     @PostMapping("/api/cartoes/{id}/avisos")
     public ResponseEntity<AvisoClientResponse> avisar(@PathVariable String id, @RequestBody AvisoClientRequest request);
+
+    @PostMapping("/api/cartoes/{id}/carteiras")
+    public  ResponseEntity<CarteiraClientResponse> criarCarteira(@PathVariable String id, @RequestBody CarteiraClientRequest request);
 }

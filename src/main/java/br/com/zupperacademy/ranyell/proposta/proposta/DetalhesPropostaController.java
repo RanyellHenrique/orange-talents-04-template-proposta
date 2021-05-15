@@ -27,7 +27,7 @@ public class DetalhesPropostaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PropostaResponse> findById(@PathVariable Long id) {
+    public ResponseEntity<PropostaResponse> BuscarPropostaPorId(@PathVariable Long id) {
         Optional<Proposta> supostaProposta = repository.findById(id);
         if(supostaProposta.isEmpty()) {
             logger.info("Proposta de id = {} não existe", id);

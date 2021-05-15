@@ -32,7 +32,7 @@ public class CadastroAvisoController {
 
     @PostMapping("{id}/avisos")
     @Transactional
-    public ResponseEntity<Void> cadastraAviso(@Valid @RequestBody AvisoRequest request,
+    public ResponseEntity<Void> cadastrarAviso(@Valid @RequestBody AvisoRequest request,
                                               HttpServletRequest servletRequest, @PathVariable Long id,
                                               @AuthenticationPrincipal Jwt usuario) {
 

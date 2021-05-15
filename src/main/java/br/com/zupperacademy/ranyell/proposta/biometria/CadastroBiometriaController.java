@@ -31,7 +31,7 @@ public class CadastroBiometriaController {
 
     @PostMapping("/{id}/biometrias")
     @Transactional
-    public ResponseEntity<Void> insert(@RequestBody @Valid BiometriaRequest request, @PathVariable Long id, @AuthenticationPrincipal Jwt usuario) {
+    public ResponseEntity<Void> cadastrarBiometria(@RequestBody @Valid BiometriaRequest request, @PathVariable Long id, @AuthenticationPrincipal Jwt usuario) {
         if(cartaoRepository.existsById(id)) {
             throw new ApiException("Cartão não encontrado", HttpStatus.NOT_FOUND);
         }

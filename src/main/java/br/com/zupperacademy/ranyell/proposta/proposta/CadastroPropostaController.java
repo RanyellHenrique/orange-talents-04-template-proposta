@@ -33,7 +33,7 @@ public class CadastroPropostaController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<Void> insert(@Valid @RequestBody PropostaRequest request) {
+    public ResponseEntity<Void> cadastrarProposta(@Valid @RequestBody PropostaRequest request) {
         var supostaProposta = repository.findByDocumento(request.getDocumento());
 
         if(supostaProposta.isPresent()) {
