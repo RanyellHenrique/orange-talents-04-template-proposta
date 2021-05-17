@@ -1,6 +1,8 @@
 package br.com.zupperacademy.ranyell.proposta.proposta;
 
 import br.com.zupperacademy.ranyell.proposta.cartao.Cartao;
+import br.com.zupperacademy.ranyell.proposta.compartilhado.CriptografaAtributo;
+import org.springframework.security.crypto.encrypt.Encryptors;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,6 +13,8 @@ public class Proposta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Convert(converter = CriptografaAtributo.class)
     private String documento;
     private String email;
     private String nome;
