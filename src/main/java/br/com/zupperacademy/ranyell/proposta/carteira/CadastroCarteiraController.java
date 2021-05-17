@@ -3,6 +3,8 @@ package br.com.zupperacademy.ranyell.proposta.carteira;
 import br.com.zupperacademy.ranyell.proposta.cartao.Cartao;
 import br.com.zupperacademy.ranyell.proposta.cartao.CartaoRepository;
 import br.com.zupperacademy.ranyell.proposta.compartilhado.exceptions.ApiException;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,27 +23,31 @@ public class CadastroCarteiraController {
     private CartaoRepository cartaoRepository;
     private SolicitaNovaCarteira solicitaNovaCarteira;
     private CarteiraRepository carteiraRepository;
+    private final Tracer tracer;
 
     @Autowired
     public CadastroCarteiraController(CartaoRepository cartaoRepository, SolicitaNovaCarteira solicitaNovaCarteira,
-                                      CarteiraRepository carteiraRepository) {
+                                      CarteiraRepository carteiraRepository, Tracer tracer) {
         this.cartaoRepository = cartaoRepository;
         this.solicitaNovaCarteira = solicitaNovaCarteira;
         this.carteiraRepository = carteiraRepository;
+        this.tracer = tracer;
     }
 
     @PostMapping("/{id}/carteiras")
     public ResponseEntity<Void> cadastrarCarteira(@Valid @RequestBody  CarteiraRequest request, @PathVariable Long id,
                                                  @AuthenticationPrincipal Jwt usuario) {
+        Span span = tracer.activeSpan();
+        span.setTag("user.email", (String) usuario.getClaims().get("email"));
         if(!cartaoRepository.existsById(id)) {
             throw new ApiException("Cartão não existe", HttpStatus.NOT_FOUND);
         }
 
         Cartao cartao = cartaoRepository.getOne(id);
-
         if(!usuario.getClaims().get("email").equals(cartao.getEmailProposta())) {
             throw new ApiException("Cartão não pertence ao usuário", HttpStatus.UNAUTHORIZED);
         }
+
         if(carteiraRepository.existsByTipoCarteiraAndCartao(request.getTipoCarteira(), cartao)){
             throw new ApiException("Carteira digital já está associada a esse cartão", HttpStatus.UNPROCESSABLE_ENTITY);
         }

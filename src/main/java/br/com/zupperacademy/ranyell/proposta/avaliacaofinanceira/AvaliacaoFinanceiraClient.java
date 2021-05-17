@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Component
 @FeignClient(url = "${api.avaliacao.financeira.url}", name = "${api.avaliacao.financeira.name}")
 public interface AvaliacaoFinanceiraClient {
 

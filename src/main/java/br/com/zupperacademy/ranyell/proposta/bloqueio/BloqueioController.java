@@ -4,6 +4,8 @@ import br.com.zupperacademy.ranyell.proposta.cartao.Cartao;
 import br.com.zupperacademy.ranyell.proposta.cartao.CartaoRepository;
 import br.com.zupperacademy.ranyell.proposta.cartao.EstadoCartao;
 import br.com.zupperacademy.ranyell.proposta.compartilhado.exceptions.ApiException;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,18 +31,22 @@ public class BloqueioController {
     private CartaoRepository cartaoRepository;
     private BloqueioRepository bloqueioRepository;
     private SolicitaBloqueio solicitaBloqueio;
+    private final Tracer tracer;
 
     @Autowired
-    public BloqueioController(CartaoRepository cartaoRepository, BloqueioRepository bloqueioRepository, SolicitaBloqueio solicitaBloqueio) {
+    public BloqueioController(CartaoRepository cartaoRepository, BloqueioRepository bloqueioRepository, SolicitaBloqueio solicitaBloqueio, Tracer tracer) {
         this.cartaoRepository = cartaoRepository;
         this.bloqueioRepository = bloqueioRepository;
         this.solicitaBloqueio = solicitaBloqueio;
+        this.tracer = tracer;
     }
 
     @PostMapping("/{id}/bloqueios")
     @Transactional
-    public ResponseEntity<?> bloquearCartao(HttpServletRequest servletRequest, @PathVariable Long id,
+    public ResponseEntity<Void> bloquearCartao(HttpServletRequest servletRequest, @PathVariable Long id,
                                             @AuthenticationPrincipal Jwt usuario) {
+        Span span = tracer.activeSpan();
+        span.setTag("user.email", (String) usuario.getClaims().get("email"));
         if(!cartaoRepository.existsById(id)) {
             throw new ApiException("Cartão não encontrado", HttpStatus.NOT_FOUND);
         }
